@@ -431,7 +431,7 @@ const titleL2 = data.title? data.title : data.titleAlternatif.romaji;
     } 
 let datastatus = data.status
     .replace("FINISHED", "Completed")
-    .replace("curent airing", "Ongoing")
+    .replace("Curent airing", "Ongoing")
     .replace("No yet aired", "Upcoming")
     .replace("N/A", "Unknown");
         
