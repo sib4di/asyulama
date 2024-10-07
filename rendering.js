@@ -432,7 +432,7 @@ const titleL2 = data.title? data.title : data.titleAlternatif.romaji;
 let datastatus = data.status
     .replace("FINISHED", "Completed")
     .replace("curent airing", "Ongoing")
-    .replace("NOT_YET_RELEASED", "Upcoming")
+    .replace("Not Yet Released", "Upcoming")
     .replace("N/A", "Unknown");
         
     postContent = format
