@@ -451,7 +451,7 @@ let datastatus = data.status
     .replace(/{{format}}/g, data.format || 'N/A')
     .replace(/{{episodes}}/g, data.episodes || 'N/A')
     .replace(/{{duration}}/g, data.duration || 'N/A')
-    .replace(/{{status}}/g, data.status)
+    .replace(/{{status}}/g, datastatus)
     .replace(/{{startDate}}/g, data.startDate || 'N/A')
     .replace(/{{endDate}}/g, data.endDate || 'N/A')
     .replace(/{{season}}/g, data.season || 'N/A')
