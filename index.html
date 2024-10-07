@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Generator</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/theme/material-darker.min.css">
+
+  <style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+}
+
+.cc_postgenerator h1 {
+    color: #3a5a40;
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.cc_postgenerator label {
+    font-weight: bold;
+    color: #3a5a40;
+}
+
+.cc_postgenerator input[type="text"], 
+.cc_postgenerator textarea, 
+.cc_postgenerator select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 5px 0 15px;
+    background-color: #eef3f7;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+}
+
+.cc_postgenerator input[type="text"]:focus, 
+.cc_postgenerator textarea:focus, 
+.cc_postgenerator select:focus {
+    border-color: #3a5a40;
+}
+
+.cc_postgenerator button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #3a5a40;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cc_postgenerator button:hover {
+    background-color: #4d725a;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.cc_postgenerator button:active {
+    background-color: #2f4931;
+}
+
+button#backup_preset_codepost::before, 
+button#btn_pulihkan_preset_codepost::before, 
+button#hapus_presetTersimpan::before, 
+button#svbutton::before, 
+button#save-config-button::before, 
+button#post-button::before {
+    font-family: "Font Awesome 5 Free"; 
+    font-weight: 900;
+    margin-right: 8px;
+}
+
+button#backup_preset_codepost::before {
+    content: "\f1c0"; /* Icon backup */
+}
+
+button#btn_pulihkan_preset_codepost::before {
+    content: "\f0e2"; /* Icon restore */
+}
+
+button#hapus_presetTersimpan::before {
+    content: "\f2ed"; /* Icon delete */
+}
+
+button#svbutton::before {
+    content: "\f0c7"; /* Icon save */
+}
+
+button#save-config-button::before {
+    content: "\f0a0"; /* Icon config */
+}
+
+button#post-button::before {
+    content: "\f1d8"; /* Icon post to blogger*/
+}
+
+.cc_postgenerator {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cc_postgenerator h1 {
+    color: #3a5a40;
+}
+
+.cc_postgenerator p {
+    color: #6c757d;
+    font-size: 16px;
+}
+
+.cc_postgenerator .tabs {
+    display: flex;
+    margin-top: 20px;
+    gap:0 5px
+}
+
+.cc_postgenerator .tab {
+    flex:1;
+    padding: 10px;
+    background-color: #999;
+    text-align: center;
+    cursor: pointer;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.cc_postgenerator .tab:hover {
+    background-color: #e9ecef;
+}
+
+.cc_postgenerator .tab.active {
+    background-color: #3a5a40;
+    color: white;
+}
+
+.cc_postgenerator .tab-content {
+    display: none;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 0 8px 8px 8px;
+}
+
+.cc_postgenerator .tab-content.active {
+    display: block;
+}
+
+#ntf_pg {
+    display:none;
+    background-color: #e9f7ef;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    font-size: 14px;
+    margin-top: 10px;
+}
+#ntf_pg.show {
+  display: block;
+  position: fixed;
+  top: 20%;
+  right:20px;
+  width: 300px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+}
+
+#result-preview {
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 4px;
+}
+
+#configAPI_custom input[type="text"] {
+    margin-bottom: 10px;
+    border: 1px solid #3a5a40;
+}
+
+@media (max-width: 768px) {
+    .cc_postgenerator button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .cc_postgenerator .tab {
+        border-radius: 8px;
+    }
+}
+
+#txtLogin {color:#fff;}
+
+        .CodeMirror {
+            height: auto;
+            min-height: 300px;
+            border: 1px solid #30363d;
+            font-size: 16px;
+        }
+        .editor-wrapper {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="cc_postgenerator">
+  
+<details><summary>Backup</summary>
+<button id="backup_preset_codepost">backup</button>
+<input type="file" id="pulihkan_preset_codepost" accept="application/json" />
+<button id="btn_pulihkan_preset_codepost">Pulihkan</button>
+<br/>
+</details>  
+          
+<!--New element v2.4-->
+<div id="cc_configAPI_custom">
+<div id="configAPI_custom">
+<label for="blog-id-post">BlogID:</label>         
+<input type="text" id="blog-id-input" placeholder="Masukkan Blog ID">
+<label for="client-id-input">Client ID:</label>
+<input type="text" id="client-id-input" placeholder="Masukkan Client ID">
+  <label for="client-secret-input">Client ID secret:</label>
+<input type="text" id="client-secret-input" placeholder="Masukkan Client Secret">
+  <label for="redirect-uri-input">Redirect URI:</label>
+<input type="text" id="redirect-uri-input" placeholder="Masukkan Redirect URI">
+<button id="save-config-button">Sumbit Config</button>
+       </div>
+<button id="login_google">
+<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 128 128">
+	<path fill="#fff" d="M44.59 4.21a63.28 63.28 0 0 0 4.33 120.9a67.6 67.6 0 0 0 32.36.35a57.13 57.13 0 0 0 25.9-13.46a57.44 57.44 0 0 0 16-26.26a74.3 74.3 0 0 0 1.61-33.58H65.27v24.69h34.47a29.72 29.72 0 0 1-12.66 19.52a36.2 36.2 0 0 1-13.93 5.5a41.3 41.3 0 0 1-15.1 0A37.2 37.2 0 0 1 44 95.74a39.3 39.3 0 0 1-14.5-19.42a38.3 38.3 0 0 1 0-24.63a39.25 39.25 0 0 1 9.18-14.91A37.17 37.17 0 0 1 76.13 27a34.3 34.3 0 0 1 13.64 8q5.83-5.8 11.64-11.63c2-2.09 4.18-4.08 6.15-6.22A61.2 61.2 0 0 0 87.2 4.59a64 64 0 0 0-42.61-.38" />
+	<path fill="#e33629" d="M44.59 4.21a64 64 0 0 1 42.61.37a61.2 61.2 0 0 1 20.35 12.62c-2 2.14-4.11 4.14-6.15 6.22Q95.58 29.23 89.77 35a34.3 34.3 0 0 0-13.64-8a37.17 37.17 0 0 0-37.46 9.74a39.25 39.25 0 0 0-9.18 14.91L8.76 35.6A63.53 63.53 0 0 1 44.59 4.21" />
+	<path fill="#f8bd00" d="M3.26 51.5a63 63 0 0 1 5.5-15.9l20.73 16.09a38.3 38.3 0 0 0 0 24.63q-10.36 8-20.73 16.08a63.33 63.33 0 0 1-5.5-40.9" />
+	<path fill="#587dbd" d="M65.27 52.15h59.52a74.3 74.3 0 0 1-1.61 33.58a57.44 57.44 0 0 1-16 26.26c-6.69-5.22-13.41-10.4-20.1-15.62a29.72 29.72 0 0 0 12.66-19.54H65.27c-.01-8.22 0-16.45 0-24.68" />
+	<path fill="#319f43" d="M8.75 92.4q10.37-8 20.73-16.08A39.3 39.3 0 0 0 44 95.74a37.2 37.2 0 0 0 14.08 6.08a41.3 41.3 0 0 0 15.1 0a36.2 36.2 0 0 0 13.93-5.5c6.69 5.22 13.41 10.4 20.1 15.62a57.13 57.13 0 0 1-25.9 13.47a67.6 67.6 0 0 1-32.36-.35a63 63 0 0 1-23-11.59A63.7 63.7 0 0 1 8.75 92.4" />
+</svg>Login terlebih dahulu</button>
+</div>
+<!--New element v2.4-->
+  
+  
+<label for="preset_ON">Pilih preset:</label>
+<select id="preset_ON"></select>
+<button id="hapus_presetTersimpan">Hapus preset</button>
+<br/>
+
+
+ <div class="editor-wrapper">
+   <textarea class="editor" id="formatpost" rows="10" placeholder="Code post"></textarea>
+    </div>
+    
+<label for="judulpreset">Judul:</label>
+<input type="text" id="judulpreset" placeholder="Namai preset ini">
+<button id="svbutton">Save Format Post</button>
+  <div class="cc_getpost">
+    <h1>GET POST</h1>
+    <p>Generate blog posts data AniList, MyAnimeList</p>
+    <label for="source_dataAnime_FectURL">Pilih Source ID:</label>
+    <select id="source_dataAnime_FectURL">
+        <option value="anilist">AniList (✅)</option>
+        <option value="jikan">MyAnimeList (✅)</option>
+        <option value="tmdb">TMDB (✅)</option>
+        <option value="imdb">IMDB (❌)</option>
+    </select>
+        <label for="type_dataAnime_FectURL">Pilih type:</label>
+    <select id="type_dataAnime_FectURL">
+        
+    </select>
+    
+    <label for="id-input">Enter ID:</label>
+    <input value="162804" type="text" id="id-input" placeholder="Enter ID from selected platform">
+      
+      
+    <!--New element v2.4 -->
+     <label for="custom-label">Custom Label:</label>
+    <input type="text" id="custom-label" placeholder="custom label.. Series,Project,Update" />
+    <button id="save-label">Save custom label</button>
+        <!--New element v2.4 -->
+    
+<button onclick="GetPost()">GePost</button>
+
+    <div>
+        <div class="tabs">
+            <button class="tab active" onclick="showTab(0)">Code</button>
+            <button class="tab" onclick="showTab(1)">Preview</button>
+        </div>
+        <div class="tab-content active" id="result-code">
+         <h2>Result Code</h2>
+         <hr/>
+         <textarea id="blogger-title" rows="2" placeholder="Title"></textarea>
+         <textarea id="blogger-labels" rows="3" placeholder="Label"></textarea>
+         
+    <div class="editor-wrapper">
+  <textarea class="editor" id="blogger-content" rows="20" placeholder="Content"></textarea> 
+    </div>
+    
+         <button id="post-button">Post to Blogger</button>
+        </div>
+
+        <div class="tab-content" id="result-preview">   <h2>Result Preview</h2>
+        <hr/>
+            <div id="post-result"></div>
+        </div>
+        
+          </div>
+          
+<!--New element v2.4-->
+<ul class="logpost_blogger">
+</ul>
+<div id="ntf_pg"></div>
+<!--New element v2.4-->
+
+      </div>
+      
+      <p>© 2024 Hirutshuji™. All Rights Reserved.</p>
+      
+</div>
+54744
+
+
+ <script>
+ configAPIKey = {
+  TMDB:"b6b0afcc3b7949d79323e31a950b7511",
+  IMDB:"",//belum selesai dikerjakan
+    }
+ </script>
+    <!-- CodeMirror JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.9/mode/htmlmixed/htmlmixed.min.js"></script>
+
+    <script>
+     const textarea_ouputGetpost = CodeMirror.fromTextArea(document.getElementById('blogger-content'), {
+            lineNumbers: true,
+            mode: 'htmlmixed',
+            theme: 'material-darker',
+            tabSize: 2,
+            indentUnit: 2,
+            matchBrackets: true,
+            lineWrapping: true
+        });
+
+        const textarea_preset = CodeMirror.fromTextArea(document.getElementById('formatpost'), {
+            lineNumbers: true,
+            mode: 'htmlmixed',
+            theme: 'material-darker',
+            tabSize: 2,
+            indentUnit: 2,
+            matchBrackets: true,
+            lineWrapping: true
+        });
+    </script>
+ <script src="modular_v3.js"></script>
+ <script src="main.js"></script>
+ <script src="rendering.js"></script>
+<script src="https://apis.google.com/js/api.js"></script> 
+</body>
+</html>
