@@ -372,7 +372,7 @@ const titleL2 = data.title? data.title : data.titleAlternatif.romaji;
       .replace(/{{type}}/g, data.type || 'N/A')
       .replace(/{{episodes}}/g, data.episodes || 'N/A')
       .replace(/{{duration}}/g, data.duration || 'N/A')
-      .replace(/{{status}}/g, data.status || 'N/A')
+      .replace(/{{status}}/g, datastatus)
       .replace(/{{aired}}/g, data.aired || 'N/A')
       .replace(/{{premiered}}/g, data.premiered || 'N/A')
       .replace(/{{broadcast}}/g, data.broadcast || 'N/A')
