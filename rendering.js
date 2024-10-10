@@ -372,7 +372,7 @@ const titleL2 = data.title? data.title : data.titleAlternatif.romaji;
       .replace(/{{type}}/g, data.type || 'N/A')
       .replace(/{{episodes}}/g, data.episodes || 'N/A')
       .replace(/{{duration}}/g, data.duration || 'N/A')
-      .replace(/{{status}}/g, datastatus)
+      .replace(/{{status}}/g, data.status || 'N/A')
       .replace(/{{aired}}/g, data.aired || 'N/A')
       .replace(/{{premiered}}/g, data.premiered || 'N/A')
       .replace(/{{broadcast}}/g, data.broadcast || 'N/A')
@@ -429,12 +429,6 @@ const titleL2 = data.title? data.title : data.titleAlternatif.romaji;
     `;
     return html;
     } 
-
-     let datastatus = data.status
-    .replace("FINISHED", "Completed")
-    .replace("Currently Airing", "Ongoing")
-    .replace("No yet aired", "Upcoming")
-    .replace("N/A", "Unknown");   
     postContent = format
     .replace(/{{title}}/g, titleL1? titleL1: titleL2)
     .replace(/{{titleRomaji}}/g, data.title.romaji || 'Unknown')
@@ -451,7 +445,7 @@ const titleL2 = data.title? data.title : data.titleAlternatif.romaji;
     .replace(/{{format}}/g, data.format || 'N/A')
     .replace(/{{episodes}}/g, data.episodes || 'N/A')
     .replace(/{{duration}}/g, data.duration || 'N/A')
-    .replace(/{{status}}/g, datastatus)
+    .replace(/{{status}}/g, data.status || 'N/A')
     .replace(/{{startDate}}/g, data.startDate || 'N/A')
     .replace(/{{endDate}}/g, data.endDate || 'N/A')
     .replace(/{{season}}/g, data.season || 'N/A')
@@ -465,6 +459,7 @@ const titleL2 = data.title? data.title : data.titleAlternatif.romaji;
     .replace(/{{countryOfOrigin}}/g, data.countryOfOrigin || 'N/A')  
     .replace(/{{licensors}}/g, data.isLicensed ? 'Yes' : 'No')  
     .replace(/{{hashtag}}/g, data.hashtag || 'N/A')  
+ .replace(/{{trailer}}/g, data.trailer.id || 'N/A')  
  
     .replace(/{{studios}}/g, Array.isArray(data.studios) ? data.studios.join(', ') : 'N/A')    
     .replace(/{{genres}}/g, Array.isArray(data.genres) ? data.genres.join(', ') : 'N/A')
